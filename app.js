@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var async = require('async');
+var later = require('later');
 var Twit = require('twit');
 
 var routes = require('./routes/index');
@@ -59,8 +61,13 @@ app.use(function (err, req, res, next) {
 	});
 });
 
+// http://bunkat.github.io/later/
+later.date.localTime();
+var textSched = later.parse.text('every 4 hours');
+var timer = later.setInterval(run, textSched);
+
 // https://github.com/ttezel/twit
-var T = new Twit({
+var t = new Twit({
 	consumer_key:         process.env.CONSUMER_KEY,
 	consumer_secret:      process.env.CONSUMER_SECRET,
 	access_token:         process.env.ACCESS_TOKEN,
@@ -68,13 +75,42 @@ var T = new Twit({
 	timeout_ms:           60*1000
 });
 
-var message = function(){
+// this was pretty useful
+// http://ursooperduper.github.io/2014/10/28/twitter-bot-with-node-js-part-2.html
 
+// https://github.com/caolan/async#waterfall
+run = function() {
+	async.waterfall([
+			getMonster,
+			formatTweet,
+			postTweet
+		],
+		function (err, result) {
+			if (err) {
+				console.log("There was an error posting to Twitter: ", err);
+			} else {
+				console.log("Tweet successful!");
+				console.log("Tweet: ", result);
+			}
+		}
+	);
 };
 
-//T.post('statuses/update', { status: message }, function(err, data, response) {
-//	console.log(data);
-//});
+getMonster = function(callback) {
+	//TODO randomly pull an entry from monsters.json
+	callback(null, monster);
+};
 
+formatTweet = function(monster, callback) {
+	message = "You encounter ";
+	message += monster;
+	callback(null, tweetMessage);
+};
+
+postTweet = function(tweetMessage, callback) {
+	t.post('statuses/update', { status: tweetMessage }, function(err, data, response) {
+		callback(null, result);
+	});
+};
 
 module.exports = app;
