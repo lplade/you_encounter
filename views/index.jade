@@ -1,5 +1,32 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	.container
+		.jumbotron
+			h1= title
+		.row
+			.col-md-6
+				.page-header
+					h2.text-center
+						em A series of random encounters
+				img.img-rounded.img-responsive(src="images/13931733910_aa0661f512_z.jpg" height=200)
+				p.small.text-right Image &copy; 2009
+					a(href="https://www.flickr.com/photos/gagilas/") Pietra Gallas
+					| ,
+					a(href="https://creativecommons.org/licenses/by-sa/2.0/") CC BY-SA 2.0
+			.col-md-6
+				.well
+					//Twitter timeline widget
+					a.twitter-timeline(data-dnt='true', href='https://twitter.com/You_Encounter', data-widget-id='717193008421023749') Tweets by @You_Encounter
+
+		//Twitter timeline widget script
+		script.
+			!function (d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+				if (!d.getElementById(id)) {
+					js = d.createElement(s);
+					js.id = id;
+					js.src = p + "://platform.twitter.com/widgets.js";
+					fjs.parentNode.insertBefore(js, fjs);
+				}
+			}(document, "script", "twitter-wjs");

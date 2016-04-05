@@ -26,6 +26,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
 	var err = new Error('Not Found');
@@ -56,6 +58,23 @@ app.use(function (err, req, res, next) {
 		error: {}
 	});
 });
+
+// https://github.com/ttezel/twit
+var T = new Twit({
+	consumer_key:         process.env.CONSUMER_KEY,
+	consumer_secret:      process.env.CONSUMER_SECRET,
+	access_token:         process.env.ACCESS_TOKEN,
+	access_token_secret:  process.env.ACCESS_TOKEN_SECRET,
+	timeout_ms:           60*1000
+});
+
+var message = function(){
+
+};
+
+//T.post('statuses/update', { status: message }, function(err, data, response) {
+//	console.log(data);
+//});
 
 
 module.exports = app;
