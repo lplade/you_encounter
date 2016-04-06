@@ -10,21 +10,25 @@ block content
 		.row
 			.col-md-6
 				p.text-center
-					a.btn.btn-primary.btn-sm(href='https://twitter.com/You_Encounter') Follow @You_encounter
+					a.twitter-follow-button(href="https://twitter.com/You_Encounter" data-size="large" data-show-count="false")
+						| Follow @You_Encounter
 					| &nbsp; to add an element of danger to your feed
 				img.img-rounded.img-responsive(src="images/nutria_posterize.jpeg" height=200)
-				p.small.text-right.text-muted Image &copy;2009&nbsp;
+				p.small.text-right.text-muted
+					a(href="https://www.flickr.com/photos/gagilas/13931733910/") Beast
+					| &nbsp;by&nbsp;
 					a(href="https://www.flickr.com/photos/gagilas/") Pietra Gallas
 					| ,&nbsp;
-					a(href="https://creativecommons.org/licenses/by-sa/2.0/") CC BY-SA 2.0
-					| &nbsp;(modified)
+					a(href="https://creativecommons.org/licenses/by-sa/2.0/")
+						img(src="images/by-sa.png" alt="CC BY-SA 2.0" height=20)
+					| &nbsp;(modified from original)
 			.col-md-6
 				.well
 					//Twitter timeline widget
 					a.twitter-timeline(data-dnt='true', href='https://twitter.com/You_Encounter', data-widget-id='717193008421023749') Tweets by @You_Encounter
 		.row
 			.col-md-12
-				p Special thanks to Kelley Vanda
+				p.text-info Special thanks to Kelley Vanda
 		//Twitter timeline widget script
 		script.
 			!function (d, s, id) {
