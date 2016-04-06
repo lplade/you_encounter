@@ -71,6 +71,8 @@ module.exports = app;
 // const for non-event "error"
 var SILENCE = "SILENCE";
 
+var CHECKTIME = process.env.CHECKTIME || 25; // time in minutes to check for an encounter
+
 //Pull in array of monsters
 var monsterObj = require('./monsters.json');
 
@@ -88,9 +90,8 @@ function Mobj(obj) {
 // Set up chron to fire every 4 hours
 // http://bunkat.github.io/later/
 later.date.localTime();
-//TODO set this as an env var
-var textSched = later.parse.text('every 4 hours'); //production rate
-//var textSched = later.parse.text('every 15 minutes'); //demo rate
+//var textSched = later.parse.text('every 4 hours'); //production rate
+var textSched = later.parse.text('every ' + CHECKTIME + ' minutes');
 //var textSched = later.parse.text('every 10 seconds'); //better for testing
 var timer = later.setInterval(run, textSched);
 
