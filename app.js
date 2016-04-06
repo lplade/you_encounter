@@ -201,7 +201,7 @@ function formatTweet(monst, callback) {
 
 function postTweet(tweetMessage, callback) {
 	t.post('statuses/update', {status: tweetMessage}, function (err, data, response) {
-		callback(null, result);
+		callback(null, tweetMessage);
 	});
 }
 
