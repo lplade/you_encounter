@@ -111,8 +111,8 @@ function run() {
 	async.waterfall([
 			encounterCheck,
 			getMonster,
-			formatTweet
-			//postTweet
+			formatTweet,
+			postTweet
 		],
 		function (err, result) {
 			if (err) {
@@ -177,6 +177,7 @@ function formatTweet(monst, callback) {
 		message += numString;
 	} else if (monst.quantity.substring(0, 1) == '%') {
 		//TODO use % to signify a random range expression i.e. %2d4
+		//TODO figure out how to handle plurals
 		throw "Not ready yet";
 	} else {
 		// Just use whatever content is, plus appropriate article
