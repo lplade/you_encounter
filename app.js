@@ -70,8 +70,21 @@ module.exports = app;
 
 //TODO store/retrieve data in MongoDB
 
+
 //Pull in array of monsters
 var monsterObj = require('./monsters.json');
+
+//Prototype for monster object
+//This helps the code inspector understand object properties
+//http://stackoverflow.com/questions/5873624/parse-json-string-into-a-particular-object-prototype-in-javascript
+function Mobj(obj)
+{
+	this.quantity = 1;
+	this.monster = "normal man";
+	for (var prop in obj) {
+		this[prop] = obj[prop];
+	}
+}
 
 // Set up chron to fire every 4 hours
 // http://bunkat.github.io/later/
@@ -97,8 +110,8 @@ var t = new Twit({
 // https://github.com/caolan/async#waterfall
 function run() {
 	async.waterfall([
-			getMonster
-			//formatTweet,
+			getMonster,
+			formatTweet
 			//postTweet
 		],
 		function (err, result) {
@@ -116,14 +129,59 @@ function getMonster(callback) {
 	//TODO randomly pull an entry from monsters.json
 	//http://stackoverflow.com/questions/10011011/using-node-js-how-do-i-read-a-json-object-into-server-memory
 	console.log("Get monster function");
-	var monster = "Carrion crawler";
+	//http://stackoverflow.com/questions/4550505/getting-random-value-from-an-array
+	var randMonster = function(){ //closure so it doesn't re-use "random" number
+		return monsterObj[Math.floor(Math.random() * monsterObj.length)];
+	}();
+	var monster = new Mobj(randMonster);
 	callback(null, monster);
 }
 
-function formatTweet(monster, callback) {
+function formatTweet(monst, callback) {
+	var article = "";
+	var firstLetter;
+	var isVowel = false;
+	console.log("Format tweet function");
+	console.log("Building " + monst.monster);
+	//Part 1: Verb
 	message = "You encounter ";
-	message += monster;
-	callback(null, tweetMessage);
+	//TODO check if .quanity and .monster are available?
+	//Part 2: Group name, quantity, or article
+	if (monst.quantity == 1) {
+		firstLetter = monst.monster.substring(0,1).toUpperCase();
+		//http://stackoverflow.com/questions/26926994/javascript-check-if-character-is-a-vowel
+		isVowel = firstLetter == "A" ||
+				firstLetter == "E" ||
+				firstLetter == "I" ||
+				firstLetter == "O" ||
+				firstLetter == "U";
+		article = isVowel ? "an " : "a ";
+		message += article;
+	} else if ( Number.isInteger(monst.quantity)){
+		//TODO convert low-value integers to number words
+		numString = " " + monst.quantity + " ";
+		message += numString;
+	} else if (monst.quantity.substring(0,1) == '%') {
+		//TODO use % to signify a random range expression i.e. %2d4
+		throw "Not ready yet";
+	} else {
+		// Just use whatever content is, plus appropriate article
+		firstLetter = monst.monster.substring(0,1).toUpperCase();
+		//http://stackoverflow.com/questions/26926994/javascript-check-if-character-is-a-vowel
+		isVowel = firstLetter == "A" ||
+			firstLetter == "E" ||
+			firstLetter == "I" ||
+			firstLetter == "O" ||
+			firstLetter == "U";
+		article = isVowel ? "an " : "a ";
+		message += article;
+		message += monst.quantity;
+		message += ' ';
+	}
+	//Part 3: the actual monster name
+	message += monst.monster;
+	console.log("'"+message+"'");
+	callback(null, message);
 }
 
 function postTweet(tweetMessage, callback) {
