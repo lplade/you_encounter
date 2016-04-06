@@ -8,8 +8,9 @@ var async = require('async');
 var later = require('later');
 var Twit = require('twit');
 
+
 var routes = require('./routes/index');
-var users = require('./routes/users');
+//var users = require('./routes/users');
 
 var app = express();
 
@@ -26,7 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+//app.use('/users', users);
 
 
 
@@ -61,11 +62,25 @@ app.use(function (err, req, res, next) {
 	});
 });
 
+module.exports = app;
+
+// END WEB SERVER ROUTING
+
+// Main twitterbot logic -- split into own file?
+
+//TODO store/retrieve data in MongoDB
+
+//Pull in array of monsters
+var monsterObj = require('./monsters.json');
+
+// Set up chron to fire every 4 hours
 // http://bunkat.github.io/later/
 later.date.localTime();
-var textSched = later.parse.text('every 4 hours');
+//var textSched = later.parse.text('every 4 hours'); //production rate
+var textSched = later.parse.text('every 10 seconds'); //better for testing
 var timer = later.setInterval(run, textSched);
 
+// Instantiate Twitter keys
 // https://github.com/ttezel/twit
 var t = new Twit({
 	consumer_key:         process.env.CONSUMER_KEY,
@@ -78,12 +93,13 @@ var t = new Twit({
 // this was pretty useful
 // http://ursooperduper.github.io/2014/10/28/twitter-bot-with-node-js-part-2.html
 
+// Waterfall halts if any function fails
 // https://github.com/caolan/async#waterfall
-run = function() {
+function run() {
 	async.waterfall([
-			getMonster,
-			formatTweet,
-			postTweet
+			getMonster
+			//formatTweet,
+			//postTweet
 		],
 		function (err, result) {
 			if (err) {
@@ -94,23 +110,25 @@ run = function() {
 			}
 		}
 	);
-};
+}
 
-getMonster = function(callback) {
+function getMonster(callback) {
 	//TODO randomly pull an entry from monsters.json
+	//http://stackoverflow.com/questions/10011011/using-node-js-how-do-i-read-a-json-object-into-server-memory
+	console.log("Get monster function");
+	var monster = "Carrion crawler";
 	callback(null, monster);
-};
+}
 
-formatTweet = function(monster, callback) {
+function formatTweet(monster, callback) {
 	message = "You encounter ";
 	message += monster;
 	callback(null, tweetMessage);
-};
+}
 
-postTweet = function(tweetMessage, callback) {
+function postTweet(tweetMessage, callback) {
 	t.post('statuses/update', { status: tweetMessage }, function(err, data, response) {
 		callback(null, result);
 	});
-};
+}
 
-module.exports = app;
