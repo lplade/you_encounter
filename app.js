@@ -120,7 +120,7 @@ function run() {
 		function (err, result) {
 			if (err) {
 				if (err == SILENCE){
-					console.info(".");
+					console.info("Checked, no encounter");
 				} else {
 					console.warn("There was an error posting to Twitter: ", err);
 				}
