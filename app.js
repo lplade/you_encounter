@@ -88,8 +88,8 @@ function Mobj(obj) {
 // Set up chron to fire every 4 hours
 // http://bunkat.github.io/later/
 later.date.localTime();
-//var textSched = later.parse.text('every 4 hours'); //production rate
-var textSched = later.parse.text('every 10 seconds'); //better for testing
+var textSched = later.parse.text('every 4 hours'); //production rate
+//var textSched = later.parse.text('every 10 seconds'); //better for testing
 var timer = later.setInterval(run, textSched);
 
 // Instantiate Twitter keys
