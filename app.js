@@ -143,7 +143,6 @@ function encounterCheck(callback) {
 }
 
 function getMonster(callback) {
-	//TODO randomly pull an entry from monsters.json
 	//http://stackoverflow.com/questions/10011011/using-node-js-how-do-i-read-a-json-object-into-server-memory
 	console.log("Get monster function");
 	//http://stackoverflow.com/questions/4550505/getting-random-value-from-an-array
