@@ -89,8 +89,9 @@ function Mobj(obj) {
 // http://bunkat.github.io/later/
 later.date.localTime();
 //TODO set this as an env var
-//var textSched = later.parse.text('every 4 hours'); //production rate
-var textSched = later.parse.text('every 10 seconds'); //better for testing
+var textSched = later.parse.text('every 4 hours'); //production rate
+//var textSched = later.parse.text('every 15 minutes'); //demo rate
+//var textSched = later.parse.text('every 10 seconds'); //better for testing
 var timer = later.setInterval(run, textSched);
 
 // Instantiate Twitter keys
